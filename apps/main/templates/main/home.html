@@ -1,0 +1,73 @@
+<html>
+  <head>
+    <title>Login and Registration</title>
+        {% load staticfiles %}
+  </head>
+  <body>
+        <div id="header">
+                <h3>Hello, {{ name }}!</h3>
+        <form action="{% url 'login:logout' %}">
+            {% csrf_token %}
+            <input type='submit' name='logout' value='Logout'/>
+        </form>
+        </div>
+        <div id="appointments">
+            <p>Here are your appointments for today, {{date}}:<p>
+            <table>
+					<tr>
+                        <th>Tasks</th>
+                        <th>Time</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+
+					{% for task in todays_tasks %}
+                        <tr>
+							<td>{{task.title}}</td>
+							<td>{{task.time}}</td>
+							<td>{{task.get_status_display}}</td>
+							{% if not task.is_done %}
+								<td><a href="home/edit/{{task.id}}">Edit</a> <a href="home/delete/{{task.id}}">Delete</a></td>
+							{% endif %}
+						</tr>
+                    {% endfor %}
+
+            </table>
+            <p>Your other appointments:<p>
+            <table>
+
+                    <tr>
+                        <th>Tasks</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                    </tr>
+
+                    {% for task in future_tasks %}
+                        <tr>
+							<td>{{task.title}}</td>
+							<td>{{task.date}}</td>
+							<td>{{task.time}}</td>
+						</tr>
+                    {% endfor %}
+
+            </table>
+        </div>
+        <div id="adding">
+            <p>Add Appointment<p>
+            <form action="home/add" method='POST'>
+                {% csrf_token %}
+                <p>Date: <input type="date" name="date"></p>
+                <p>Time: <input type="time" name="time"></p>
+                <p>Task: <input type="text" name="title"></p>
+                <input type='submit' name='add' value='Add'/>
+            </form>
+			{% if messages %}
+                <ul class='messages'>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+  </body>
+</html>

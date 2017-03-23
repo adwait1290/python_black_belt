@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <title>{{ title }}</title>
+</head>
+<div class="container">
+    <div class="section">
+        <div class="row">
+            <a href="{% url 'books:index' %}" class="col s2">Home</a>
+            <a href="{% url 'books:new_book' %}" class="col s4">Add Book and Review</a>
+            <a href="{% url 'account:logout' %}" class="col s1">Logout</a>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="row">
+            <h3>Name: {{account.first_name}} {{account.last_name}}</h3>
+            <p>Email: {{account.email}}</p>
+            <p>Total Reviews: {{count}}</p>
+        </div>
+    </div>
+
+    <div class="section">
+        <h5>You reviews</h5>
+        <div class="row">
+            {% for review in reviews %}
+                <p><a href="{% url 'books:show_book' id=review.book.id %}">{{review.book.title}}</a></p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
